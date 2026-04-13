@@ -23,7 +23,7 @@ const TestEngine = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/tests')
+    fetch('https://webtechnologyproject-lyw0.onrender.com/api/tests')
       .then(res => res.json())
       .then(data => {
         setTestDatabase(data);
@@ -105,7 +105,7 @@ const TestEngine = () => {
       setIsFinished(true);
 
       try {
-        await fetch('http://localhost:5000/api/tests/results', {
+        await fetch('https://webtechnologyproject-lyw0.onrender.com/api/tests/results', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

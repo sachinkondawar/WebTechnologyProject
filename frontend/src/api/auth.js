@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5000/api/auth';
+const API_URL = 'https://webtechnologyproject-lyw0.onrender.com/api/auth';
 
 export const signup = async (userData) => {
     const response = await fetch(`${API_URL}/signup`, {

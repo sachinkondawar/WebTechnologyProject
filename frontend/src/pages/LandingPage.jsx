@@ -19,7 +19,7 @@ const LandingPage = () => {
       return; 
     }
 
-    fetch('http://localhost:5000/api/tests')
+    fetch('https://webtechnologyproject-lyw0.onrender.com/api/tests')
       .then(res => res.json())
       .then(data => {
         setTestDatabase(data);
