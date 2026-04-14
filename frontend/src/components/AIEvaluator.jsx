@@ -33,7 +33,10 @@ const AIEvaluator = ({ question, onAnswer }) => {
     try {
       const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
       // Downgraded to 1.5-flash which has higher capacity and rarely hits 503s.
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const model = genAI.getGenerativeModel({ 
+        model: "gemini-1.5-flash",
+        generationConfig: { responseMimeType: "application/json" }
+      });
 
       // Build the transcript for the AI to read
       let transcript = currentHistory.map(m => `${m.role === 'user' ? 'Patient' : 'Examiner'}: ${m.text}`).join('\n');
