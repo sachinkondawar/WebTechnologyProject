@@ -34,7 +34,7 @@ const AIEvaluator = ({ question, onAnswer }) => {
       const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
       // Downgraded to 1.5-flash which has higher capacity and rarely hits 503s.
       const model = genAI.getGenerativeModel({ 
-        model: "gemini-1.5-flash",
+        model: "gemini-2.5-flash",
         generationConfig: { responseMimeType: "application/json" }
       });
 
