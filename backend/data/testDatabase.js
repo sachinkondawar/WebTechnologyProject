@@ -6,11 +6,12 @@ export const testDatabase = [
     description: "A comprehensive assessment of visual, auditory, and motor skills.",
     color: "bg-blue-500",
     questions: [
-      { id: "q1", type: "VISUAL_NAMING", instruction: "Identify this object.", assetUrl: "https://images.unsplash.com/photo-1614027164847-1b28cfe1df60?auto=format&fit=crop&w=600&q=80", correctAnswer: "lion", points: 2, penalty: -1 },
-      { id: "q2", type: "AUDIO_DICTATION", instruction: "Listen and transcribe exactly what you hear.", spokenText: "The quick brown fox jumps over the lazy dog.", correctAnswer: "the quick brown fox jumps over the lazy dog", points: 3, penalty: -1 },
-      { id: "q3", type: "MATH_LOGIC", instruction: "Start at 100 and subtract 7. What is the result?", correctAnswer: "93", points: 1, penalty: 0 },
-      { id: "q4", type: "VISUAL_NAMING", instruction: "Identify this object.", assetUrl: "https://images.unsplash.com/photo-1584824486509-112e4181ff6b?auto=format&fit=crop&w=600&q=80", correctAnswer: "laptop", points: 1, penalty: -1 },
-      { id: "q5", type: "DRAWING", instruction: "Replicate the intersecting pentagons exactly.", assetUrl: "https://placehold.co/400x400/ffffff/000000?text=Draw+Two+Intersecting+Pentagons", needsManualGrading: true }
+      { id: "q1", type: "MATH_LOGIC", instruction: "Start at 100 and subtract 10. What is the result?", correctAnswer: "90", points: 1, penalty: 0 },
+      { id: "q2", type: "VISUAL_NAMING", instruction: "Identify this object.", assetUrl: "https://images.unsplash.com/photo-1543852786-1cf6624b9987?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", correctAnswer: "cat", points: 1, penalty: -1 },
+      { id: "q3", type: "DRAWING", instruction: "Replicate the intersecting pentagons exactly.", assetUrl: "https://placehold.co/400x400/ffffff/000000?text=Draw+Two+Intersecting+Pentagons", needsManualGrading: true },
+      { id: "q4", type: "VISUAL_NAMING", instruction: "Identify this object.", assetUrl: "https://images.unsplash.com/photo-1614027164847-1b28cfe1df60?auto=format&fit=crop&w=600&q=80", correctAnswer: "lion", points: 2, penalty: -1 },
+      { id: "q5", type: "AUDIO_DICTATION", instruction: "Listen and transcribe exactly what you hear.", spokenText: "The quick brown fox jumps over the lazy dog.", correctAnswer: "the quick brown fox jumps over the lazy dog", points: 3, penalty: -1 }
+
     ]
   },
 
@@ -22,8 +23,9 @@ export const testDatabase = [
     color: "bg-purple-500",
     questions: [
       { id: "e1", type: "STROOP_TEST", instruction: "Type the COLOR of the ink, NOT the word.", wordText: "YELLOW", hexColor: "#EF4444", correctAnswer: "red", points: 3, penalty: -2 },
-      { id: "e2", type: "STROOP_TEST", instruction: "Type the COLOR of the ink, NOT the word.", wordText: "BLUE", hexColor: "#A3E635", correctAnswer: "green", points: 3, penalty: -2 },
-      { id: "e3", type: "DIGIT_SPAN", instruction: "Listen to the numbers. Type them BACKWARDS.", spokenText: "2, 4, 7, 9", correctAnswer: "9742", points: 4, penalty: -1 }
+      { id: "e3", type: "DIGIT_SPAN", instruction: "Listen to the numbers. Type them BACKWARDS.", spokenText: "2, 4, 7, 9", correctAnswer: "9742", points: 4, penalty: -1 },
+      { id: "e2", type: "STROOP_TEST", instruction: "Type the COLOR of the ink, NOT the word.", wordText: "BLUE", hexColor: "#A3E635", correctAnswer: "green", points: 3, penalty: -2 }
+
     ]
   },
 
@@ -34,13 +36,13 @@ export const testDatabase = [
     description: "Evaluates short-term visuospatial memory and pattern recall.",
     color: "bg-emerald-500",
     questions: [
-      { 
-        id: "s1", 
-        type: "PATTERN_MEMORY", 
-        instruction: "Memorize the glowing tiles. When they hide, click the exact pattern.", 
-        targetPattern: [0, 4, 6, 8], 
-        points: 5, 
-        penalty: -2 
+      {
+        id: "s1",
+        type: "PATTERN_MEMORY",
+        instruction: "Memorize the glowing tiles. When they hide, click the exact pattern.",
+        targetPattern: [0, 4, 6, 8],
+        points: 5,
+        penalty: -2
       }
     ]
   },
@@ -52,11 +54,11 @@ export const testDatabase = [
     description: "A real-time, dynamic conversation with an AI neuropsychologist evaluating abstract reasoning.",
     color: "bg-cyan-600",
     questions: [
-      { 
-        id: "ai1", 
+      {
+        id: "ai1",
         type: "AI_INTERVIEW",
         points: 5,
-        needsManualGrading: false 
+        needsManualGrading: false
       }
     ]
   }
