@@ -1,4 +1,4 @@
-const API_URL = 'https://webtechnologyproject-lyw0.onrender.com/api/auth';
+const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api/auth` : 'http://localhost:5000/api/auth';
 
 export const signup = async (userData) => {
     const response = await fetch(`${API_URL}/signup`, {

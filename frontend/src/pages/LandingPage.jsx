@@ -19,7 +19,8 @@ const LandingPage = () => {
       return; 
     }
 
-    fetch('https://webtechnologyproject-lyw0.onrender.com/api/tests')
+    const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    fetch(`${baseUrl}/api/tests`)
       .then(res => res.json())
       .then(data => {
         setTestDatabase(data);

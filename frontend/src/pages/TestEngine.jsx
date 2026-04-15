@@ -23,7 +23,8 @@ const TestEngine = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('https://webtechnologyproject-lyw0.onrender.com/api/tests')
+    const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    fetch(`${baseUrl}/api/tests`)
       .then(res => res.json())
       .then(data => {
         setTestDatabase(data);
@@ -105,7 +106,8 @@ const TestEngine = () => {
       setIsFinished(true);
 
       try {
-        await fetch('https://webtechnologyproject-lyw0.onrender.com/api/tests/results', {
+        const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+        await fetch(`${baseUrl}/api/tests/results`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
