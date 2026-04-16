@@ -35,16 +35,10 @@ const LoginPage = () => {
       
       <div className="relative z-10 w-full max-w-md animate-fade-in">
         
-        {/* Logo/Brand */}
+        {/* Welcome Text */}
         <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center gap-2 mb-6 group">
-            <BrainCircuit className="text-jb-accent group-hover:scale-110 transition-transform" size={32} />
-            <span className="text-3xl font-black tracking-tighter bg-gradient-to-r from-teal-500 via-cyan-500 to-emerald-500 bg-clip-text text-transparent">
-              Smriti
-            </span>
-          </Link>
-          <h2 className="text-2xl font-bold text-slate-800">Welcome Back</h2>
-          <p className="text-slate-500 mt-2">Log in to access your cognitive dashboard</p>
+          <h2 className="text-3xl font-bold text-white drop-shadow-sm">Welcome Back</h2>
+          <p className="text-slate-400 mt-2">Log in to access your cognitive dashboard</p>
         </div>
 
         {/* Card */}
@@ -55,16 +49,16 @@ const LoginPage = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             
             {error && (
-              <div className="p-4 bg-red-50 text-red-600 border border-red-100 rounded-xl text-sm text-center">
+              <div className="p-4 bg-red-900/30 text-red-300 border border-red-500/30 rounded-xl text-sm text-center font-medium">
                 {error}
               </div>
             )}
 
             <div className="space-y-2 relative">
-              <label className="text-sm font-semibold text-slate-700 ml-1">Email Address</label>
+              <label className="text-sm font-semibold text-slate-300 ml-1">Email Address</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-slate-400 group-focus-within:text-jb-accent transition-colors" />
+                  <Mail className="h-5 w-5 text-slate-500 group-focus-within:text-jb-accent transition-colors" />
                 </div>
                 <input
                   type="email"
@@ -72,17 +66,17 @@ const LoginPage = () => {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full pl-11 pr-4 py-3 bg-white/50 border border-jb-border rounded-xl focus:ring-2 focus:ring-jb-accent focus:border-transparent outline-none transition-all placeholder-slate-400"
+                  className="w-full pl-11 pr-4 py-3 bg-black/20 text-white border border-jb-border rounded-xl focus:ring-2 focus:ring-jb-accent focus:border-transparent outline-none transition-all placeholder-slate-500"
                   placeholder="Enter your email"
                 />
               </div>
             </div>
 
             <div className="space-y-2 relative">
-              <label className="text-sm font-semibold text-slate-700 ml-1">Password</label>
+              <label className="text-sm font-semibold text-slate-300 ml-1">Password</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-slate-400 group-focus-within:text-jb-accent transition-colors" />
+                  <Lock className="h-5 w-5 text-slate-500 group-focus-within:text-jb-accent transition-colors" />
                 </div>
                 <input
                   type="password"
@@ -90,7 +84,7 @@ const LoginPage = () => {
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className="w-full pl-11 pr-4 py-3 bg-white/50 border border-jb-border rounded-xl focus:ring-2 focus:ring-jb-accent focus:border-transparent outline-none transition-all placeholder-slate-400"
+                  className="w-full pl-11 pr-4 py-3 bg-black/20 text-white border border-jb-border rounded-xl focus:ring-2 focus:ring-jb-accent focus:border-transparent outline-none transition-all placeholder-slate-500"
                   placeholder="••••••••"
                 />
               </div>
@@ -99,7 +93,7 @@ const LoginPage = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white py-4 rounded-xl font-medium transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed mt-4"
+              className="w-full flex items-center justify-center gap-2 bg-jb-accent hover:bg-jb-accent-hover text-white py-4 rounded-xl font-medium transition-all duration-300 hover:shadow-[0_0_20px_rgba(14,165,233,0.4)] hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed mt-4"
             >
               {loading ? (
                 <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
@@ -112,10 +106,10 @@ const LoginPage = () => {
 
           </form>
 
-          <div className="mt-8 text-center">
-            <p className="text-slate-500 text-sm">
+          <div className="mt-8 text-center pt-6 border-t border-jb-border/50">
+            <p className="text-slate-400 text-sm">
               Don't have an account?{' '}
-              <Link to="/signup" className="text-jb-accent font-semibold hover:underline flex items-center justify-center gap-1 inline-flex">
+              <Link to="/signup" className="text-jb-accent font-semibold hover:text-white transition-colors flex items-center justify-center gap-1 inline-flex">
                 Create one <ArrowRight size={14} />
               </Link>
             </p>
