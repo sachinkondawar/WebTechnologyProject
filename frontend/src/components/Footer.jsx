@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <footer className="relative border-t border-jb-border bg-jb-dark/70 backdrop-blur-xl pt-16 pb-8 overflow-hidden z-10 w-full">
       {/* Top subtle glow line */}
-      <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-jb-accent/50 to-transparent"></div>
+      <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-jb-accent/50 to-transparent" />
       
       <div className="max-w-7xl mx-auto px-4 md:px-8 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
@@ -57,8 +57,8 @@ const Footer = () => {
             &copy; {new Date().getFullYear()} Smriti Cognitive Platform. All rights reserved.
           </p>
           <div className="flex items-center gap-6 text-sm text-slate-500">
-            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+            <a href="#" className="hover:text-jb-accent transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-jb-accent transition-colors">Terms of Service</a>
           </div>
         </div>
       </div>

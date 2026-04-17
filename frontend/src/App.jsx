@@ -6,6 +6,7 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import { ThemeProvider } from './context/ThemeContext';
 
 const Layout = ({ children }) => {
   const location = useLocation();
@@ -24,21 +25,23 @@ const Layout = ({ children }) => {
 
 function App() {
   return (
-    <Router>
-      <Layout>
-        <Routes>
-          {/* The Main Landing Page */}
-          <Route path="/" element={<LandingPage />} />
-          
-          {/* Authentication Pages */}
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          
-          {/* The Dynamic Test Engine */}
-          <Route path="/test/:testId" element={<TestEngine />} />
-        </Routes>
-      </Layout>
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <Layout>
+          <Routes>
+            {/* The Main Landing Page */}
+            <Route path="/" element={<LandingPage />} />
+            
+            {/* Authentication Pages */}
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+            
+            {/* The Dynamic Test Engine */}
+            <Route path="/test/:testId" element={<TestEngine />} />
+          </Routes>
+        </Layout>
+      </Router>
+    </ThemeProvider>
   );
 }
 
