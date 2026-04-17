@@ -69,6 +69,7 @@ app.post('/api/tests/results', (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Backend server running on http://localhost:${PORT}`);
+    console.log(`Accessible on local network at http://192.168.29.44:${PORT}`);
 });
