@@ -76,3 +76,17 @@ html.light .bg-black\/20 {
 html.light .text-slate-700 {
   color: rgb(51 65 85) !important;
 }
+
+/* ===== GOOGLE TRANSLATE CUSTOMIZATION ===== */
+/* Completely hide the default Google Translate UI, banner, and popups */
+.skiptranslate,
+.goog-te-banner-frame,
+#google_translate_element,
+.goog-te-gadget-simple,
+.goog-tooltip {
+  display: none !important;
+}
+
+body {
+  top: 0px !important; 
+}

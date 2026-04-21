@@ -4,6 +4,7 @@ import LandingPage from './pages/LandingPage';
 import TestEngine from './pages/TestEngine';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
+import DashboardPage from './pages/DashboardPage';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import { ThemeProvider } from './context/ThemeContext';
@@ -36,6 +37,9 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
             
+            {/* User Progress Dashboard */}
+            <Route path="/dashboard" element={<DashboardPage />} />
+
             {/* The Dynamic Test Engine */}
             <Route path="/test/:testId" element={<TestEngine />} />
           </Routes>

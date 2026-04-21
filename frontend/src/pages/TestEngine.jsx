@@ -107,9 +107,13 @@ const TestEngine = () => {
 
       try {
         const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+        const user = JSON.parse(localStorage.getItem('user'));
         await fetch(`${baseUrl}/api/tests/results`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${user?.token}`
+          },
           body: JSON.stringify({
             testId,
             finalScore: calculatedScore,
@@ -169,8 +173,8 @@ const TestEngine = () => {
             </p>
           </div>
 
-          <Link to="/" className="inline-flex items-center gap-2 bg-jb-accent hover:bg-jb-accent-hover text-white px-8 py-4 rounded-xl font-medium transition-colors shadow-[0_8px_20px_rgba(13,148,136,0.2)]">
-            Return to Dashboard
+          <Link to="/dashboard" className="inline-flex items-center gap-2 bg-jb-accent hover:bg-jb-accent-hover text-white px-8 py-4 rounded-xl font-medium transition-colors shadow-[0_8px_20px_rgba(13,148,136,0.2)]">
+            View My Dashboard
           </Link>
         </div>
       </div>
