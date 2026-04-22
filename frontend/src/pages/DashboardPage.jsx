@@ -239,13 +239,22 @@ const DashboardPage = () => {
   })();
 
   useEffect(() => {
-    const base = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    let base = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    base = base.replace(/\/+$/, ''); // Remove any trailing slashes
+
     fetch(`${base}/api/tests/results`, {
       headers: { 'Authorization': `Bearer ${user?.token}` }
     })
-      .then(r => r.json())
+      .then(async r => {
+        if (!r.ok) {
+          const text = await r.text();
+          console.error("Failed to fetch results. Status:", r.status, text);
+          throw new Error('Network response was not ok');
+        }
+        return r.json();
+      })
       .then(d => { setResults(Array.isArray(d) ? d : []); setLoading(false); })
-      .catch(() => setLoading(false));
+      .catch(err => { console.error("Error fetching dashboard data:", err); setLoading(false); });
   }, []);
 
   if (!user) return <Navigate to="/login" replace />;

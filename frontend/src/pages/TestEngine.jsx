@@ -23,7 +23,8 @@ const TestEngine = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    let baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    baseUrl = baseUrl.replace(/\/+$/, '');
     fetch(`${baseUrl}/api/tests`)
       .then(res => res.json())
       .then(data => {
@@ -106,7 +107,8 @@ const TestEngine = () => {
       setIsFinished(true);
 
       try {
-        const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+        let baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+        baseUrl = baseUrl.replace(/\/+$/, '');
         const user = JSON.parse(localStorage.getItem('user'));
         await fetch(`${baseUrl}/api/tests/results`, {
           method: 'POST',

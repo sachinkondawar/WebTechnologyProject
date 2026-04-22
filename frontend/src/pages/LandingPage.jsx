@@ -19,7 +19,8 @@ const LandingPage = () => {
       return;
     }
 
-    const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    let baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    baseUrl = baseUrl.replace(/\/+$/, '');
     fetch(`${baseUrl}/api/tests`)
       .then(res => res.json())
       .then(data => {
