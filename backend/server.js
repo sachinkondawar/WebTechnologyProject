@@ -37,6 +37,40 @@ app.get('/api/tests/results', protect, async (req, res) => {
     }
 });
 
+// ─── GET /api/tests/leaderboard — fetch global leaderboard ──────────────────
+app.get('/api/tests/leaderboard', protect, async (req, res) => {
+    try {
+        const results = await TestResult.find().populate('userId', 'name').lean();
+        const userStats = {};
+        
+        results.forEach(r => {
+            if (!r.userId || !r.userId.name || r.maxScore === 0) return;
+            const uid = r.userId._id.toString();
+            if (!userStats[uid]) {
+                userStats[uid] = { name: r.userId.name, totalScore: 0, totalMax: 0, testsTaken: 0 };
+            }
+            userStats[uid].totalScore += r.finalScore;
+            userStats[uid].totalMax += r.maxScore;
+            userStats[uid].testsTaken += 1;
+        });
+
+        let rank = 1;
+        const leaderboard = Object.values(userStats).map(u => ({
+            name: u.name,
+            testsTaken: u.testsTaken,
+            scorePct: Math.round((u.totalScore / u.totalMax) * 100)
+        })).sort((a, b) => {
+            if (b.scorePct !== a.scorePct) return b.scorePct - a.scorePct;
+            return b.testsTaken - a.testsTaken;
+        }).map(u => ({ ...u, rank: rank++ }));
+
+        res.json(leaderboard);
+    } catch (error) {
+        console.error('Error fetching leaderboard:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 // ─── POST /api/tests/results — save a new result for logged-in user ─────────
 app.post('/api/tests/results', protect, async (req, res) => {
     try {

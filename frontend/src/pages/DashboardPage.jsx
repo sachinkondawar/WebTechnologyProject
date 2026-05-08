@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, Navigate } from 'react-router-dom';
-import { BarChart2, TrendingUp, Brain, Trophy, Target, Activity, ArrowRight, Calendar } from 'lucide-react';
+import { BarChart2, TrendingUp, Brain, Trophy, Target, Activity, ArrowRight, Calendar, Users } from 'lucide-react';
 import NeuralBackground from '../components/NeuralBackground';
 
 // ─── Module metadata ───────────────────────────────────────────────────────────
@@ -232,6 +232,7 @@ const DashStyle = () => (
 // ─── Main Dashboard ────────────────────────────────────────────────────────────
 const DashboardPage = () => {
   const [results, setResults] = useState([]);
+  const [leaderboard, setLeaderboard] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const user = (() => {
@@ -242,19 +243,29 @@ const DashboardPage = () => {
     let base = import.meta.env.VITE_API_URL || 'http://localhost:5000';
     base = base.replace(/\/+$/, ''); // Remove any trailing slashes
 
-    fetch(`${base}/api/tests/results`, {
-      headers: { 'Authorization': `Bearer ${user?.token}` }
-    })
-      .then(async r => {
-        if (!r.ok) {
-          const text = await r.text();
-          console.error("Failed to fetch results. Status:", r.status, text);
-          throw new Error('Network response was not ok');
-        }
-        return r.json();
-      })
-      .then(d => { setResults(Array.isArray(d) ? d : []); setLoading(false); })
-      .catch(err => { console.error("Error fetching dashboard data:", err); setLoading(false); });
+    const fetchDashboardData = async () => {
+      try {
+        const [resResults, resLeaderboard] = await Promise.all([
+          fetch(`${base}/api/tests/results`, { headers: { 'Authorization': `Bearer ${user?.token}` } }),
+          fetch(`${base}/api/tests/leaderboard`, { headers: { 'Authorization': `Bearer ${user?.token}` } })
+        ]);
+
+        if (!resResults.ok) throw new Error('Failed to fetch results');
+        if (!resLeaderboard.ok) throw new Error('Failed to fetch leaderboard');
+
+        const dataResults = await resResults.json();
+        const dataLeaderboard = await resLeaderboard.json();
+
+        setResults(Array.isArray(dataResults) ? dataResults : []);
+        setLeaderboard(Array.isArray(dataLeaderboard) ? dataLeaderboard : []);
+      } catch (err) {
+        console.error("Error fetching dashboard data:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
   }, []);
 
   if (!user) return <Navigate to="/login" replace />;
@@ -395,8 +406,8 @@ const DashboardPage = () => {
           </div>
         </div>
 
-        {/* ── Bottom Row: Bar Chart + Recent Attempts ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* ── Bottom Row: Bar Chart + Recent Attempts + Leaderboard ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
           {/* Bar Chart */}
           <div className="bg-jb-card backdrop-blur-xl border border-jb-border rounded-2xl p-6 animate-fade-in" style={{ animationDelay: '0.3s' }}>
@@ -443,6 +454,43 @@ const DashboardPage = () => {
               </Link>
             </div>
           </div>
+
+          {/* Global Leaderboard */}
+          <div className="bg-jb-card backdrop-blur-xl border border-jb-border rounded-2xl p-6 flex flex-col animate-fade-in" style={{ animationDelay: '0.45s' }}>
+            <div className="flex items-center gap-2 mb-5">
+              <Users size={18} className="text-yellow-400" />
+              <h2 className="text-base font-semibold text-white">Global Rank List</h2>
+            </div>
+            <div className="space-y-2 flex-grow overflow-y-auto pr-1" style={{ maxHeight: 360 }}>
+              {leaderboard.length === 0 ? (
+                <p className="text-sm text-slate-500 text-center py-4">No users ranked yet.</p>
+              ) : (
+                leaderboard.map((u) => {
+                  let rankColor = "text-slate-400";
+                  let bgRank = "bg-white/5 border-white/5";
+                  if (u.rank === 1) { rankColor = "text-yellow-400"; bgRank = "bg-yellow-500/10 border-yellow-500/20"; }
+                  else if (u.rank === 2) { rankColor = "text-slate-300"; bgRank = "bg-slate-300/10 border-slate-300/20"; }
+                  else if (u.rank === 3) { rankColor = "text-amber-600"; bgRank = "bg-amber-600/10 border-amber-600/20"; }
+
+                  return (
+                    <div key={u.name + u.rank} className={`flex items-center gap-3 p-3 rounded-xl border transition-colors group ${bgRank}`}>
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center font-black ${rankColor} bg-black/30 flex-shrink-0`}>
+                        #{u.rank}
+                      </div>
+                      <div className="flex-grow min-w-0">
+                        <p className="text-sm font-semibold text-slate-200 truncate">{u.name}</p>
+                        <p className="text-xs text-slate-500">{u.testsTaken} test{u.testsTaken !== 1 ? 's' : ''} taken</p>
+                      </div>
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        <span className={`text-sm font-black ${rankColor}`}>{u.scorePct}%</span>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          </div>
+
         </div>
 
       </div>
