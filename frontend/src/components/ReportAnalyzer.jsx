@@ -47,19 +47,19 @@ const ReportAnalyzer = () => {
       // 1. Read file as Base64
       const reader = new FileReader();
       reader.readAsDataURL(file);
-      
+
       reader.onload = async () => {
         try {
           const base64String = reader.result.split(',')[1];
-          
+
           // 2. Initialize Gemini AI
           const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
           if (!apiKey) {
             throw new Error("Gemini API key is missing. Please check your .env file.");
           }
-          
+
           const genAI = new GoogleGenerativeAI(apiKey);
-          const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+          const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
 
           // 3. Prepare Prompt and Data
           const prompt = `
@@ -84,7 +84,7 @@ const ReportAnalyzer = () => {
           // 4. Generate Content
           const result = await model.generateContent([prompt, pdfPart]);
           const responseText = result.response.text();
-          
+
           setAnalysis(responseText);
         } catch (err) {
           console.error("Gemini Analysis Error:", err);
@@ -93,7 +93,7 @@ const ReportAnalyzer = () => {
           setLoading(false);
         }
       };
-      
+
       reader.onerror = () => {
         setError("Failed to read the file.");
         setLoading(false);
@@ -109,7 +109,7 @@ const ReportAnalyzer = () => {
   // Helper to safely render very basic markdown structure
   const renderMarkdown = (text) => {
     if (!text) return null;
-    
+
     const lines = text.split('\n');
     return lines.map((line, index) => {
       if (line.startsWith('### ')) {
@@ -128,7 +128,7 @@ const ReportAnalyzer = () => {
         // Format bold text within list items
         let content = line.substring(2);
         const parts = content.split(/(\*\*.*?\*\*)/g);
-        
+
         return (
           <li key={index} className="ml-4 text-slate-300 mb-1 list-disc">
             {parts.map((part, i) => {
@@ -143,20 +143,20 @@ const ReportAnalyzer = () => {
       if (line.trim() === '') {
         return <br key={index} />;
       }
-      
+
       // Handle bold text inline
       if (line.includes('**')) {
-         const parts = line.split(/(\*\*.*?\*\*)/g);
-         return (
-           <p key={index} className="text-slate-300 mb-2 leading-relaxed">
-             {parts.map((part, i) => {
-                if (part.startsWith('**') && part.endsWith('**')) {
-                  return <strong key={i} className="text-slate-100">{part.slice(2, -2)}</strong>;
-                }
-                return part;
-              })}
-           </p>
-         );
+        const parts = line.split(/(\*\*.*?\*\*)/g);
+        return (
+          <p key={index} className="text-slate-300 mb-2 leading-relaxed">
+            {parts.map((part, i) => {
+              if (part.startsWith('**') && part.endsWith('**')) {
+                return <strong key={i} className="text-slate-100">{part.slice(2, -2)}</strong>;
+              }
+              return part;
+            })}
+          </p>
+        );
       }
 
       return <p key={index} className="text-slate-300 mb-2 leading-relaxed">{line}</p>;
@@ -179,24 +179,24 @@ const ReportAnalyzer = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
-        
+
         {/* Upload Section */}
         <div className="md:col-span-2 flex flex-col gap-4">
-          <div 
+          <div
             className={`border-2 border-dashed rounded-2xl p-8 flex flex-col items-center justify-center text-center transition-all cursor-pointer h-full min-h-[250px]
               ${file ? 'border-emerald-500/50 bg-emerald-500/5' : 'border-jb-border hover:border-jb-accent/50 bg-black/20 hover:bg-black/40'}`}
             onDragOver={handleDragOver}
             onDrop={handleDrop}
             onClick={() => fileInputRef.current?.click()}
           >
-            <input 
-              type="file" 
-              ref={fileInputRef} 
-              onChange={handleFileChange} 
-              accept=".pdf,application/pdf" 
-              className="hidden" 
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              accept=".pdf,application/pdf"
+              className="hidden"
             />
-            
+
             {file ? (
               <>
                 <FileText className="h-12 w-12 text-emerald-400 mb-3" />

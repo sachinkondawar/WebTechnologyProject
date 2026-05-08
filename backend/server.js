@@ -17,16 +17,16 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// ─── Auth Routes ────────────────────────────────────────────────────────────
+// ─── Auth Routes  
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 
-// ─── GET /api/tests — static test catalogue ─────────────────────────────────
+// ─── GET /api/tests — static test catalogue  
 app.get('/api/tests', (req, res) => {
     res.json(testDatabase);
 });
 
-// ─── GET /api/tests/results — fetch results for logged-in user ────────────
+// ─── GET /api/tests/results — fetch results for logged-in user  
 app.get('/api/tests/results', protect, async (req, res) => {
     try {
         const results = await TestResult.find({ userId: req.user._id })
@@ -39,12 +39,12 @@ app.get('/api/tests/results', protect, async (req, res) => {
     }
 });
 
-// ─── GET /api/tests/leaderboard — fetch global leaderboard ──────────────────
+// ─── GET /api/tests/leaderboard — fetch global leaderboard  
 app.get('/api/tests/leaderboard', protect, async (req, res) => {
     try {
         const results = await TestResult.find().populate('userId', 'name').lean();
         const userStats = {};
-        
+
         results.forEach(r => {
             if (!r.userId || !r.userId.name || r.maxScore === 0) return;
             const uid = r.userId._id.toString();
@@ -73,7 +73,7 @@ app.get('/api/tests/leaderboard', protect, async (req, res) => {
     }
 });
 
-// ─── POST /api/tests/results — save a new result for logged-in user ─────────
+// ─── POST /api/tests/results — save a new result for logged-in user  
 app.post('/api/tests/results', protect, async (req, res) => {
     try {
         const { testId, finalScore, maxScore, answers } = req.body;
