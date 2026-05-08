@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { LogIn, ArrowRight, BrainCircuit, Mail, Lock } from 'lucide-react';
+import { LogIn, ArrowRight, Mail, Lock, ShieldAlert, User } from 'lucide-react';
 import NeuralBackground from '../components/NeuralBackground';
-import { login } from '../api/auth';
+import { login as userLogin } from '../api/auth';
+import { adminLogin } from '../api/adminApi';
 
 const LoginPage = () => {
+  const [mode, setMode] = useState('user'); // 'user' or 'admin'
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -20,10 +22,15 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
-      await login(formData);
-      navigate('/'); // Redirect to dashboard or landing page
+      if (mode === 'admin') {
+        await adminLogin(formData);
+        navigate('/admin/dashboard');
+      } else {
+        await userLogin(formData);
+        navigate('/'); // Redirect to dashboard or landing page
+      }
     } catch (err) {
-      setError(err.message || 'Failed to login');
+      setError(err.message || `Failed to login as ${mode}`);
     } finally {
       setLoading(false);
     }
@@ -46,6 +53,30 @@ const LoginPage = () => {
           {/* Subtle top glow line */}
           <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-transparent via-jb-accent to-transparent"></div>
 
+          {/* User/Admin Toggle */}
+          <div className="flex bg-black/40 rounded-xl p-1 mb-6 border border-jb-border">
+            <button
+              onClick={() => setMode('user')}
+              className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium transition-all ${
+                mode === 'user' 
+                  ? 'bg-jb-accent text-white shadow-md' 
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <User size={16} /> User
+            </button>
+            <button
+              onClick={() => setMode('admin')}
+              className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium transition-all ${
+                mode === 'admin' 
+                  ? 'bg-rose-500 text-white shadow-md' 
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <ShieldAlert size={16} /> Admin
+            </button>
+          </div>
+
           <form onSubmit={handleSubmit} className="space-y-6">
             
             {error && (
@@ -55,10 +86,12 @@ const LoginPage = () => {
             )}
 
             <div className="space-y-2 relative">
-              <label className="text-sm font-semibold text-slate-300 ml-1">Email Address</label>
+              <label className="text-sm font-semibold text-slate-300 ml-1">
+                {mode === 'admin' ? 'Admin Email' : 'Email Address'}
+              </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-slate-500 group-focus-within:text-jb-accent transition-colors" />
+                  <Mail className={`h-5 w-5 text-slate-500 transition-colors ${mode === 'admin' ? 'group-focus-within:text-rose-400' : 'group-focus-within:text-jb-accent'}`} />
                 </div>
                 <input
                   type="email"
@@ -66,8 +99,8 @@ const LoginPage = () => {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full pl-11 pr-4 py-3 bg-black/20 text-white border border-jb-border rounded-xl focus:ring-2 focus:ring-jb-accent focus:border-transparent outline-none transition-all placeholder-slate-500"
-                  placeholder="Enter your email"
+                  className={`w-full pl-11 pr-4 py-3 bg-black/20 text-white border border-jb-border rounded-xl focus:ring-2 focus:border-transparent outline-none transition-all placeholder-slate-500 ${mode === 'admin' ? 'focus:ring-rose-500/50' : 'focus:ring-jb-accent'}`}
+                  placeholder={mode === 'admin' ? "admin@example.com" : "Enter your email"}
                 />
               </div>
             </div>
@@ -76,7 +109,7 @@ const LoginPage = () => {
               <label className="text-sm font-semibold text-slate-300 ml-1">Password</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-slate-500 group-focus-within:text-jb-accent transition-colors" />
+                  <Lock className={`h-5 w-5 text-slate-500 transition-colors ${mode === 'admin' ? 'group-focus-within:text-rose-400' : 'group-focus-within:text-jb-accent'}`} />
                 </div>
                 <input
                   type="password"
@@ -84,7 +117,7 @@ const LoginPage = () => {
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className="w-full pl-11 pr-4 py-3 bg-black/20 text-white border border-jb-border rounded-xl focus:ring-2 focus:ring-jb-accent focus:border-transparent outline-none transition-all placeholder-slate-500"
+                  className={`w-full pl-11 pr-4 py-3 bg-black/20 text-white border border-jb-border rounded-xl focus:ring-2 focus:border-transparent outline-none transition-all placeholder-slate-500 ${mode === 'admin' ? 'focus:ring-rose-500/50' : 'focus:ring-jb-accent'}`}
                   placeholder="••••••••"
                 />
               </div>
@@ -93,13 +126,17 @@ const LoginPage = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 bg-jb-accent hover:bg-jb-accent-hover text-white py-4 rounded-xl font-medium transition-all duration-300 hover:shadow-[0_0_20px_rgba(14,165,233,0.4)] hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed mt-4"
+              className={`w-full flex items-center justify-center gap-2 text-white py-4 rounded-xl font-medium transition-all duration-300 hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed mt-4 ${
+                mode === 'admin'
+                  ? 'bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 hover:shadow-[0_0_20px_rgba(244,63,94,0.4)]'
+                  : 'bg-jb-accent hover:bg-jb-accent-hover hover:shadow-[0_0_20px_rgba(14,165,233,0.4)]'
+              }`}
             >
               {loading ? (
                 <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
               ) : (
                 <>
-                  Secure Login <LogIn size={20} />
+                  {mode === 'admin' ? 'Admin Login' : 'Secure Login'} <LogIn size={20} />
                 </>
               )}
             </button>
@@ -109,7 +146,7 @@ const LoginPage = () => {
           <div className="mt-8 text-center pt-6 border-t border-jb-border/50">
             <p className="text-slate-400 text-sm">
               Don't have an account?{' '}
-              <Link to="/signup" className="text-jb-accent font-semibold hover:text-white transition-colors flex items-center justify-center gap-1 inline-flex">
+              <Link to="/signup" className={`font-semibold hover:text-white transition-colors flex items-center justify-center gap-1 inline-flex ${mode === 'admin' ? 'text-rose-400' : 'text-jb-accent'}`}>
                 Create one <ArrowRight size={14} />
               </Link>
             </p>

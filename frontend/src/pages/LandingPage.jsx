@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { BrainCircuit, ArrowRight, Sparkles } from 'lucide-react';
 import NeuralBackground from '../components/NeuralBackground';
+import ReportAnalyzer from '../components/ReportAnalyzer';
 
 const LandingPage = () => {
   const [testDatabase, setTestDatabase] = useState([]);
@@ -98,6 +99,11 @@ const LandingPage = () => {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* AI Report Analyzer Section */}
+        <div className="max-w-6xl mx-auto animate-fade-in mt-16" style={{ animationDelay: '0.4s' }}>
+          <ReportAnalyzer />
         </div>
 
       </div>

@@ -6,6 +6,7 @@ import { testDatabase } from './data/testDatabase.js';
 import TestResult from './models/TestResult.js';
 import protect from './middleware/authMiddleware.js';
 import authRoutes from './routes/authRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
 
 dotenv.config();
 connectDB();
@@ -18,6 +19,7 @@ app.use(express.json());
 
 // ─── Auth Routes ────────────────────────────────────────────────────────────
 app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
 
 // ─── GET /api/tests — static test catalogue ─────────────────────────────────
 app.get('/api/tests', (req, res) => {

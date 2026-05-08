@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, Navigate } from 'react-router-dom';
-import { BarChart2, TrendingUp, Brain, Trophy, Target, Activity, ArrowRight, Calendar, Users } from 'lucide-react';
+import { BarChart2, TrendingUp, Brain, Trophy, Target, Activity, ArrowRight, Calendar, Users, Download } from 'lucide-react';
 import NeuralBackground from '../components/NeuralBackground';
+import { generatePDFReport } from '../utils/generateReport';
 
 // ─── Module metadata ───────────────────────────────────────────────────────────
 const MODULE_META = {
@@ -354,14 +355,22 @@ const DashboardPage = () => {
       <div className="relative z-10 max-w-7xl mx-auto">
 
         {/* ── Page Header ── */}
-        <div className="mb-10 animate-fade-in">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-jb-card border border-jb-border mb-4 text-xs text-slate-400 tracking-wide">
-            <Activity size={12} className="text-jb-accent" /> Analytics Dashboard
+        <div className="mb-10 animate-fade-in flex flex-col md:flex-row md:items-start justify-between gap-6">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-jb-card border border-jb-border mb-4 text-xs text-slate-400 tracking-wide">
+              <Activity size={12} className="text-jb-accent" /> Analytics Dashboard
+            </div>
+            <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight">
+              Welcome back, <span className="bg-gradient-to-r from-jb-accent via-cyan-400 to-purple-500 bg-clip-text text-transparent">{user?.name?.split(' ')[0] ?? 'User'}</span>
+            </h1>
+            <p className="text-slate-400 mt-2 text-lg">Here's a full picture of your cognitive performance.</p>
           </div>
-          <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight">
-            Welcome back, <span className="bg-gradient-to-r from-jb-accent via-cyan-400 to-purple-500 bg-clip-text text-transparent">{user?.name?.split(' ')[0] ?? 'User'}</span>
-          </h1>
-          <p className="text-slate-400 mt-2 text-lg">Here's a full picture of your cognitive performance.</p>
+          <button
+            onClick={() => generatePDFReport(user, results)}
+            className="flex-shrink-0 inline-flex items-center gap-2 px-5 py-2.5 bg-jb-card hover:bg-jb-accent/10 text-jb-accent border border-jb-accent/30 rounded-xl font-medium transition-all shadow-sm hover:shadow-[0_0_15px_rgba(14,165,233,0.2)]"
+          >
+            <Download size={18} /> Download Report
+          </button>
         </div>
 
         {/* ── Stats Row ── */}
