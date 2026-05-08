@@ -59,28 +59,38 @@ const TestEngine = () => {
     let max = 0;
 
     activeTest.questions.forEach(q => {
-      if (q.needsManualGrading) return;
-      max += q.points;
+      max += (q.points || 0);
       
       const rawUserAnswer = answers[q.id];
       let isCorrect = false;
 
       // 1. Handle the AI pre-graded object (Gemini) - UPDATED TO AI_INTERVIEW
-      if (q.type === 'AI_INTERVIEW' && rawUserAnswer?.type === 'AI_GRADED') {
-        total += rawUserAnswer.score;
+      if (q.type === 'AI_INTERVIEW') {
+        if (rawUserAnswer?.type === 'AI_GRADED') {
+          total += rawUserAnswer.score;
+        }
         return; 
       }
+
+      // 2. Handle Drawing (Give point if they attempted to draw something)
+      else if (q.type === 'DRAWING') {
+        if (rawUserAnswer) {
+          isCorrect = true;
+        }
+      }
       
-      // 2. Handle Pattern Memory (Arrays converted to strings)
+      // 3. Handle Pattern Memory (Arrays converted to strings)
       else if (q.type === 'PATTERN_MEMORY') {
         const correctStr = q.targetPattern.sort().join(',');
         if ((rawUserAnswer || "").toString() === correctStr) isCorrect = true;
       } 
       
-      // 3. Handle Standard Text Inputs
+      // 4. Handle Standard Text Inputs
       else {
-        const cleanUserAnswer = (rawUserAnswer || "").toString().toLowerCase().replace(/[.,!?]/g, "").replace(/\s+/g, " ").trim();
-        const cleanCorrectAnswer = q.correctAnswer.toLowerCase().replace(/[.,!?]/g, "").replace(/\s+/g, " ").trim();
+        if (!rawUserAnswer) return;
+        
+        const cleanUserAnswer = rawUserAnswer.toString().toLowerCase().replace(/[.,!?]/g, "").replace(/\s+/g, " ").trim();
+        const cleanCorrectAnswer = (q.correctAnswer || "").toLowerCase().replace(/[.,!?]/g, "").replace(/\s+/g, " ").trim();
         
         if (cleanUserAnswer === "") return;
         
@@ -136,19 +146,19 @@ const TestEngine = () => {
     switch (question.type) {
       case 'VISUAL_NAMING': 
       case 'MATH_LOGIC': 
-        return <VisualNaming question={question} onAnswer={handleAnswer} />;
+        return <VisualNaming key={question.id} question={question} onAnswer={handleAnswer} onEnter={handleNext} />;
       case 'AUDIO_DICTATION': 
-        return <AudioDictation question={question} onAnswer={handleAnswer} />;
+        return <AudioDictation key={question.id} question={question} onAnswer={handleAnswer} onEnter={handleNext} />;
       case 'DRAWING': 
-        return <DrawingCanvas question={question} onAnswer={handleAnswer} />;
+        return <DrawingCanvas key={question.id} question={question} onAnswer={handleAnswer} />;
       case 'STROOP_TEST': 
-        return <StroopTask question={question} onAnswer={handleAnswer} />;
+        return <StroopTask key={question.id} question={question} onAnswer={handleAnswer} onEnter={handleNext} />;
       case 'DIGIT_SPAN': 
-        return <DigitSpan question={question} onAnswer={handleAnswer} />;
+        return <DigitSpan key={question.id} question={question} onAnswer={handleAnswer} onEnter={handleNext} />;
       case 'PATTERN_MEMORY': 
-        return <PatternMemory question={question} onAnswer={handleAnswer} />;
-      case 'AI_INTERVIEW': // <--- FIXED THIS EXACT MISMATCH
-        return <AIEvaluator question={question} onAnswer={handleAnswer} />;
+        return <PatternMemory key={question.id} question={question} onAnswer={handleAnswer} />;
+      case 'AI_INTERVIEW': 
+        return <AIEvaluator key={question.id} question={question} onAnswer={handleAnswer} />;
       default: 
         return <p className="text-gray-400">Unknown module type</p>;
     }
@@ -171,7 +181,7 @@ const TestEngine = () => {
               {finalScore} <span className="text-3xl text-slate-500">/ {maxScore}</span>
             </div>
             <p className="font-medium text-slate-400 text-sm">
-              *Note: Drawing exercises require manual review and are not included in this score.
+              *Note: Drawing exercises are awarded 1 point for completion, but require manual review by an examiner.
             </p>
           </div>
 

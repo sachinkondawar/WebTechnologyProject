@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { PlayCircle, Square } from 'lucide-react';
 
-const AudioDictation = ({ question, onAnswer }) => {
+const AudioDictation = ({ question, onAnswer, onEnter }) => {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const toggleAudio = () => {
@@ -36,6 +36,12 @@ const AudioDictation = ({ question, onAnswer }) => {
       <textarea 
         placeholder="Type exactly what you heard..."
         onChange={(e) => onAnswer(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            if (onEnter) onEnter();
+          }
+        }}
         className="bg-white border border-slate-200 rounded-xl px-6 py-4 text-slate-800 text-xl leading-relaxed h-40 focus:outline-none focus:border-jb-accent focus:ring-1 focus:ring-jb-accent shadow-sm transition-all w-full max-w-2xl placeholder:text-slate-400 resize-none"
       />
     </div>

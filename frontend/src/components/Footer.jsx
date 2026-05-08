@@ -7,10 +7,10 @@ const Footer = () => {
     <footer className="relative border-t border-jb-border bg-jb-dark/70 backdrop-blur-xl pt-16 pb-8 overflow-hidden z-10 w-full">
       {/* Top subtle glow line */}
       <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-jb-accent/50 to-transparent" />
-      
+
       <div className="max-w-7xl mx-auto px-4 md:px-8 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-          
+
           {/* Brand Info */}
           <div className="md:col-span-2 space-y-4">
             <Link to="/" className="inline-flex items-center gap-2">
@@ -38,13 +38,13 @@ const Footer = () => {
           <div className="space-y-4">
             <h4 className="text-white font-semibold tracking-wide text-sm uppercase">Connect</h4>
             <div className="flex items-center gap-4">
-              <a href="#" className="p-2 bg-jb-card border border-jb-border rounded-lg text-slate-400 hover:text-white hover:border-jb-accent transition-all hover:-translate-y-1">
+              <a href="https://github.com/sachinkondawar" className="p-2 bg-jb-card border border-jb-border rounded-lg text-slate-400 hover:text-white hover:border-jb-accent transition-all hover:-translate-y-1">
                 <Github size={18} />
               </a>
               <a href="#" className="p-2 bg-jb-card border border-jb-border rounded-lg text-slate-400 hover:text-white hover:border-jb-accent transition-all hover:-translate-y-1">
                 <Twitter size={18} />
               </a>
-              <a href="#" className="p-2 bg-jb-card border border-jb-border rounded-lg text-slate-400 hover:text-white hover:border-jb-accent transition-all hover:-translate-y-1">
+              <a href="https://www.linkedin.com/in/sachin-kondawar/" className="p-2 bg-jb-card border border-jb-border rounded-lg text-slate-400 hover:text-white hover:border-jb-accent transition-all hover:-translate-y-1">
                 <Linkedin size={18} />
               </a>
             </div>

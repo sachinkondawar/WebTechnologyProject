@@ -1,6 +1,6 @@
 import React from 'react';
 
-const VisualNaming = ({ question, onAnswer }) => {
+const VisualNaming = ({ question, onAnswer, onEnter }) => {
   return (
     <div className="flex flex-col items-center animate-fade-in w-full">
       {/* Sleek Image Container */}
@@ -19,6 +19,12 @@ const VisualNaming = ({ question, onAnswer }) => {
         type="text" 
         placeholder="Type your answer here..."
         onChange={(e) => onAnswer(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            if (onEnter) onEnter();
+          }
+        }}
         className="bg-white border border-slate-200 rounded-xl px-6 py-4 text-slate-800 text-2xl uppercase tracking-wider focus:outline-none focus:border-jb-accent focus:ring-1 focus:ring-jb-accent shadow-sm transition-all w-full max-w-xl placeholder:text-slate-400 placeholder:normal-case placeholder:tracking-normal"
       />
     </div>

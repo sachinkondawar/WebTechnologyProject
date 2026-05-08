@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Ear, Square } from 'lucide-react';
 
-const DigitSpan = ({ question, onAnswer }) => {
+const DigitSpan = ({ question, onAnswer, onEnter }) => {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const toggleAudio = () => {
@@ -36,6 +36,12 @@ const DigitSpan = ({ question, onAnswer }) => {
         type="number" 
         placeholder="Type sequence backwards (e.g. 987)..."
         onChange={(e) => onAnswer(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            if (onEnter) onEnter();
+          }
+        }}
         className="bg-white border border-slate-200 rounded-xl px-6 py-4 text-slate-800 text-2xl tracking-widest focus:outline-none focus:border-jb-accent focus:ring-1 focus:ring-jb-accent shadow-sm transition-all w-full max-w-xl text-center placeholder:text-slate-400 placeholder:text-base placeholder:tracking-normal"
       />
     </div>
